@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Placeholder from '@/components/Placeholder'
 
 Vue.use(Router)
 
@@ -9,7 +9,30 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: () => import('./views/Home.vue')
+    },
+    {
+      path: '/app',
+      name: 'app',
+      component: () => import('./views/app/App.vue'),
+      children: [
+        {
+          path: 'employers',
+          component: () => import('./views/app/employers/list.vue'),
+          children: [
+            {
+              path: '',
+              name: 'fill-employers',
+              component: Placeholder
+            },
+            {
+              path: 'add',
+              name: 'employers-add',
+              component: () => import('./components/EmployersAdd.vue')
+            }
+          ]
+        }
+      ]
     },
     {
       path: '/about',

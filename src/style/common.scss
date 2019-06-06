@@ -1,0 +1,26 @@
+$prim-1: #049bff;
+$prim-2: #ff9b04;
+$prim-3: #ff1d04;
+
+.prim-1-text {
+  color: $prim-1 !important;
+}
+
+.prim-1-back {
+  background-color: darken($prim-1, 10) !important;
+}
+.prim-2-back {
+  background-color: darken($prim-2, 20) !important;
+}
+
+.v-toolbar__extension {
+  padding: 0 !important;
+}
+
+.v-progress-linear {
+  transform: scale(1, -1);
+}
+
+.v-navigation-drawer {
+  z-index: 1;
+}
