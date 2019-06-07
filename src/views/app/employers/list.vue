@@ -1,7 +1,7 @@
 <template>
   <div id="employers-list">
     <v-layout row class="pa-0 ma-0" fill-height>
-      <v-flex md3 class="ma-0 pa-0 left-side" style="">
+      <v-flex fill-height md3 class="ma-0 pa-0 left-side" style="">
         <v-toolbar flat dense color="white" height="72">
           <v-toolbar-title class="subtitle font-weight-bold grey--text pl-3">Data Pegawai</v-toolbar-title>
           <v-spacer/>
@@ -12,14 +12,19 @@
         <v-divider/>
         <v-layout row>
           <v-flex md12 class="px-4">
-            <v-list two-line>
+            <v-list dense>
               <template v-for="item in items">
                 <v-list-tile :key="item.id" avatar>
-                  <text-avatar :x="item.nama[0]" class="mr-2"/>
+                  <text-avatar :x="item.nama[0]" :size="32" class="mr-2"/>
                   <v-list-tile-content>
                     <v-list-tile-title>{{ item.nama }}</v-list-tile-title>
                     <v-list-tile-sub-title>{{ item.username }}</v-list-tile-sub-title>
                   </v-list-tile-content>
+                  <v-list-tile-action>
+                    <v-btn icon dark flat color="pink" @click="remove(item.id)">
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                  </v-list-tile-action>
                 </v-list-tile>
               </template>
             </v-list>
@@ -35,44 +40,39 @@
 </template>
 
 <script>
-import API from '@/services'
+import { mapState, mapActions } from 'vuex'
+import ACTIONS from '@/store/actions.js'
 
 export default {
   name: 'EmployersList',
-  data: () => ({
-    items: []
-  }),
   methods: {
-    loadItems () {
-      API.Pegawai.list()
-        .then(items => {
-          this.items = items
+    ...mapActions({
+      loadItems: ACTIONS.EMPLOYERS_LOAD_ITEMS
+    }),
+    remove (id) {
+      this.$store.dispatch(ACTIONS.EMPLOYERS_DELETE, id)
+        .then(() => {
+          this.loadItems()
         })
-        .catch(err => {
-          console.log(err)
-        })
-        // .then(() => {
-        //   this.$store.commit('toggleLoading')
-        // })
     }
   },
   computed: {
+    ...mapState({
+      items: 'employers'
+    }),
     cover () {
       return this.$route.name !== 'fill-employers'
     }
   },
   mounted () {
     this.loadItems()
-    if (this.$route.name !== 'fill-employers') {
-      this.cover = true
-    }
   }
 }
 </script>
 
 <style lang="scss">
 #employers-list {
-  display: table-cell;
+  height: 100%;
 
   .left-side {
     position: relative;
@@ -86,7 +86,7 @@ export default {
       left: 0;
       right: 0;
       background: rgba(255, 255, 255, 0.8);
-      z-index: 90;
+      z-index: 2;
     }
   }
 }

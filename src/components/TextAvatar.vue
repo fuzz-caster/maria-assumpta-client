@@ -1,6 +1,6 @@
 <template>
-  <v-avatar :color="color" size="40">
-    <span class="title white--text">{{ x.toUpperCase() }}</span>
+  <v-avatar :color="color" :size="size" tile>
+    <span class="white--text">{{ x.toUpperCase() }}</span>
   </v-avatar>
 </template>
 
@@ -18,7 +18,7 @@ const colors = [
 ]
 
 export default {
-  props: ['x'],
+  props: ['x', 'size'],
   name: 'TextAvatar',
   data: () => ({
     color: colors[0]

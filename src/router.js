@@ -31,6 +31,33 @@ export default new Router({
               component: () => import('./components/EmployersAdd.vue')
             }
           ]
+        },
+        {
+          path: 'members',
+          alias: '/app/members/list',
+          component: () => import('./views/app/members/list.vue')
+        },
+        {
+          path: 'members/list',
+          name: 'members-list',
+          component: () => import('./views/app/members/list.vue')
+        },
+        {
+          path: 'members/add',
+          component: () => import('./views/app/members/add.vue')
+        },
+        {
+          path: 'questions',
+          component: () => import('./views/app/questions/list.vue')
+        },
+        {
+          path: 'questions/:id',
+          props: true,
+          component: () => import('./views/app/questions/edit.vue')
+        },
+        {
+          path: 'questions/add',
+          component: () => import('./views/app/questions/add.vue')
         }
       ]
     },

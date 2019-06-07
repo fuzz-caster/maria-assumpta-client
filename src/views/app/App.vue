@@ -1,15 +1,18 @@
 <template>
   <div id="assumpta--main-app">
+
+    <!-- Toolbar -->
     <v-toolbar
       app
-      dense
       dark
       extended
       extension-height="0"
       class="assumpta--main-toolbar"
       style="padding-left: 0 !important"
-      height="42"
     >
+      <v-toolbar-side-icon>
+        <font-awesome-icon icon="signal" size="2x"></font-awesome-icon>
+      </v-toolbar-side-icon>
       <v-toolbar-title class="title text-uppercase">
         <span>ASSUMPTA</span>
         <span class="font-weight-light"> / KOPDIT</span>
@@ -24,26 +27,46 @@
       </v-btn>
       <v-progress-linear :active="loading" slot="extension" class="mx-0" indeterminate height="4"/>
     </v-toolbar>
-    <v-navigation-drawer v-model="showNav" fixed clipped app mini-variant>
-      <v-list dark class="pt-0 side-list-icons" two-line>
-        <template v-for="(nav, idx) in navItems">
-          <v-list-tile :key="nav.path" class="px-0">
+
+    <!-- Left side drawer -->
+    <v-navigation-drawer v-model="showNav" clipped app mini-variant mini-variant-width="72">
+      <v-list class="pt-0 side-list-icons" two-line>
+        <template v-for="nav in navItems">
+          <v-list-tile :key="nav.path" class="px-0" :to="nav.path" avatar>
             <v-list-tile-action class="px-0">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                  <v-btn flat icon :to="nav.path" :color="nav.color" v-on="on">
-                    <v-icon>{{nav.icon}}</v-icon>
-                  </v-btn>
+                  <v-icon>{{nav.icon}}</v-icon>
                 </template>
                 <span>{{  nav.title}}</span>
               </v-tooltip>
             </v-list-tile-action>
           </v-list-tile>
-          <div :key="`side-divider-${idx}`" class="grey lighten-2" style="height: 1px;"></div>
         </template>
       </v-list>
     </v-navigation-drawer>
+
+    <!-- Last 5 actions messages, displayed as snackbars -->
+
+    <!-- Main Content Goes Here -->
     <router-view/>
+
+    <v-footer app height="8">
+      <v-layout
+      justify-center
+      row
+      wrap
+    >
+      <v-flex
+        lighten-2
+        py-2
+        text-xs-right
+        xs12
+      >
+        <span class="subtitle">{{ message }}</span>
+      </v-flex>
+    </v-layout>
+    </v-footer>
   </div>
 </template>
 
@@ -89,7 +112,8 @@ export default {
     showNav: true
   }),
   computed: mapState({
-    loading: 'loading'
+    loading: 'loading',
+    message: 'lastMessage'
   })
 }
 </script>
@@ -97,7 +121,6 @@ export default {
 <style lang="scss">
 #assumpta--main-app {
   background-color: white;
-  display: table;
   height: 100%;
   width: 100%;
 
@@ -114,7 +137,14 @@ export default {
       .v-list__tile__action {
         width: 100%;
       }
+    }
+  }
 
+  .v-list__tile--active {
+    background: $prim-1;
+
+    .v-list__tile__action {
+      color: white;
     }
   }
 }

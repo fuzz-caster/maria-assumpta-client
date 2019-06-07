@@ -755,6 +755,18 @@
     error-stack-parser "^2.0.0"
     string-width "^2.0.0"
 
+"@tozd/vue-observer-utils@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@tozd/vue-observer-utils/-/vue-observer-utils-0.4.0.tgz#0492047393dbce74199011f988266128eb4d0e91"
+  integrity sha512-tvYIW5OOCSmqbEWCC64PwIcbBBiqO7hB5jElBF1Qeka6odAKMnDWQeaILhhW+RcVMHT6Ias5WRHeCZBXxCX/cw==
+
+"@tozd/vue-snackbar-queue@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@tozd/vue-snackbar-queue/-/vue-snackbar-queue-0.1.0.tgz#371ddc199a0222668098ba92075d4d6eb6a719dd"
+  integrity sha512-uFyly9DGjRajD7SsBi3mD1x45/ffL7XURWY/6pbNenrO6nbKyNhgaAFid22DgnydiFuoeFn5jxnlLbg1bC17fw==
+  dependencies:
+    "@tozd/vue-observer-utils" "^0.4.0"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
