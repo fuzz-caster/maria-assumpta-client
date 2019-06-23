@@ -1,18 +1,17 @@
 import axios from 'axios'
+const API_URL = process.env.VUE_APP_API_URL
 // import store from '@/store.js'
 
-const API = axios.create({
-  baseURL: 'http://localhost:5000/api/v1'
+export const API = axios.create({
+  baseURL: API_URL
 })
 
-// function wrapLoading (f) {
-//   return async function() {
-//     store.commit('loading', true)
-//     const result = await f(...arguments)
-//     store.commit('loading', false)
-//     return result
-//   }
-// }
+export const Auth = {
+  login: (username, password) => {
+    const payload ={ username, password }
+    return API.post('/auth', payload).then(resp => resp.data)
+  }
+}
 
 export const Pegawai = {
   list: () => {
@@ -33,6 +32,9 @@ export const Member = {
   add: payload => {
     return API.post('/members', payload).then(resp => resp.data)
   },
+  update: ({ id, payload }) => {
+    return API.put(`/members/${id}`, payload).then(resp => resp.data)
+  },
   remove: id => {
     return API.delete(`/members/${id}`)
   }
@@ -41,6 +43,9 @@ export const Member = {
 export const Question = {
   list: () => {
     return API.get('/questions').then(resp => resp.data)
+  },
+  listAllNested: () => {
+    return API.get('/questions/allNested').then(resp => resp.data)
   },
   add: payload => {
     return API.post('/questions', payload).then(resp => resp.data)
@@ -59,10 +64,21 @@ export const Question = {
 
 export const Answer = {
   byQuestion: questionId => {
-    return API.get(`/questions/${questionId}/answers`).then(resp => resp.data)
+    return API.get(`/questions/${questionId}/answers`)
+      .then(resp => resp.data)
+      .then(items => items.map(it => ({
+        ...it,
+        questionId
+      })))
+  },
+  getOneById: id => {
+    return API.get(`/answers/${id}`).then(resp => resp.data)
   },
   add: payload => {
     return API.post('/answers', payload).then(resp => resp.data)
+  },
+  update: ({id, payload}) => {
+    return API.put(`/answers/${id}`, payload).then(resp => resp.data)
   },
   remove: id => {
     return API.delete(`/answers/${id}`)
@@ -79,11 +95,20 @@ export const CreditRequest = {
   list: () => {
     return API.get('/credit-requests').then(resp => resp.data)
   },
+  listSorted: () => {
+    return API.get('/profile-matching/run').then(resp => resp.data)
+  },
+  getOneById: id => {
+    return API.get(`/credit-requests/${id}`).then(resp => resp.data)
+  },
   add: payload => {
     return API.post('/credit-requests', payload).then(resp => resp.data)
   },
+  update: ({ id, payload }) => {
+    return API.put(`/credit-requests/${id}`, payload).then(resp => resp.data)
+  },
   remove: id => {
-    return API.get(`/credit-requests/${id}`)
+    return API.delete(`/credit-requests/${id}`)
   }
 }
 

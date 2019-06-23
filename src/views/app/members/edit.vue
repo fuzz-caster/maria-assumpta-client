@@ -10,14 +10,14 @@
         <v-select :items="options.sex" v-model="item.sex" label="Jenis Kelamin"></v-select>
         <v-text-field box flat v-model="item.noHp" label="No. HP" />
         <v-text-field box flat v-model="item.alamat" label="Alamat" />
-        <v-text-field box flat v-model="item.statusTerakhir" label="Pendidikan Terakhir" />
+        <v-text-field box flat v-model="item.statusTerakhir" label="Status Terakhir" />
         <v-text-field box flat v-model.number="item.limitKredit" label="Limit Kredit" />
         <v-text-field box flat v-model.number="item.jangkaWaktu" label="Jangka Waktu" />
         <v-text-field box flat v-model="item.tempatLahir" label="Tempat Lahir" />
         <v-text-field box flat v-model="item.tanggalLahir" type="date" label="Tanggal Lahir" />
       </v-card-text>
       <v-card-actions>
-        <v-btn color="blue" dark @click="add">
+        <v-btn color="blue" dark @click="update">
           Ok
         </v-btn>
         <v-btn color="pink" dark @click="$router.back()">
@@ -30,8 +30,10 @@
 
 <script>
 import Actions from '@/store/actions'
+// import { mapState } from 'vuex'
 
 export default {
+  props: ['id'],
   data: () => ({
     item: {
       nama: '',
@@ -50,12 +52,33 @@ export default {
     }
   }),
   methods: {
-    add () {
-      this.$store.dispatch(Actions.MEMBERS_ADD, this.item)
+    update () {
+      const payload = {
+        id: this.id,
+        payload: this.item
+      }
+      this.$store.dispatch(Actions.MEMBER_UPDATE, payload)
         .then(() => {
           this.$router.back()
         })
+    },
+    loadData () {
+      const members = this.$store.state.members
+      const intId = parseInt(this.id)
+      console.log(members)
+      const item = members.find(it => {
+        console.log('it.id = ', it.id)
+        console.log('id = ', intId)
+        return it.id === intId
+      })
+      if (!item) {
+        throw new Error('HERE')
+      }
+      this.item = item
     }
+  },
+  mounted () {
+    this.loadData()
   }
 }
 </script>

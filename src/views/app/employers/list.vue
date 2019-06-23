@@ -1,7 +1,18 @@
 <template>
   <div id="employers-list">
+    <v-dialog v-model="deleteWarning">
+      <v-card>
+        <v-card-text>
+          Hapus data?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn flat @click="remove(deleteId)">Ya</v-btn>
+          <v-btn flat @click="deleteWarning = false; deleteId = undefined;">Tidak</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-layout row class="pa-0 ma-0" fill-height>
-      <v-flex fill-height md3 class="ma-0 pa-0 left-side" style="">
+      <v-flex fill-height md6 xs12 class="ma-0 pa-0 left-side mx-auto">
         <v-toolbar flat dense color="white" height="72">
           <v-toolbar-title class="subtitle font-weight-bold grey--text pl-3">Data Pegawai</v-toolbar-title>
           <v-spacer/>
@@ -10,30 +21,22 @@
           </v-btn>
         </v-toolbar>
         <v-divider/>
-        <v-layout row>
-          <v-flex md12 class="px-4">
-            <v-list dense>
-              <template v-for="item in items">
-                <v-list-tile :key="item.id" avatar>
-                  <text-avatar :x="item.nama[0]" :size="32" class="mr-2"/>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{ item.nama }}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{ item.username }}</v-list-tile-sub-title>
-                  </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-btn icon dark flat color="pink" @click="remove(item.id)">
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                  </v-list-tile-action>
-                </v-list-tile>
-              </template>
-            </v-list>
-          </v-flex>
-        </v-layout>
-        <div v-if="cover" class="cover"></div>
-      </v-flex>
-      <v-flex md9 class="ma-0 pa-0 grey lighten-3" fill-height>
-        <router-view/>
+        <v-list dense>
+          <template v-for="item in items">
+            <v-list-tile :key="item.id" avatar>
+              <text-avatar :x="item.nama[0]" :size="32" class="mr-2"/>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.nama }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ item.username }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-btn icon dark flat color="pink" @click="showDeleteWarning(item.id)">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+          </template>
+        </v-list>
       </v-flex>
     </v-layout>
   </div>
@@ -45,13 +48,23 @@ import ACTIONS from '@/store/actions.js'
 
 export default {
   name: 'EmployersList',
+  data: () => ({
+    deleteWarning: false,
+    deleteId: undefined
+  }),
   methods: {
     ...mapActions({
       loadItems: ACTIONS.EMPLOYERS_LOAD_ITEMS
     }),
+    showDeleteWarning (id) {
+      this.deleteId = id
+      this.deleteWarning = true
+    },
     remove (id) {
       this.$store.dispatch(ACTIONS.EMPLOYERS_DELETE, id)
         .then(() => {
+          this.deleteWarning = false
+          this.deleteId = undefined
           this.loadItems()
         })
     }
@@ -59,10 +72,7 @@ export default {
   computed: {
     ...mapState({
       items: 'employers'
-    }),
-    cover () {
-      return this.$route.name !== 'fill-employers'
-    }
+    })
   },
   mounted () {
     this.loadItems()

@@ -1,35 +1,41 @@
 <template>
-  <div id="assumpta--main-app">
+  <div id="assumpta--main-app" class="grey lighten-4">
 
     <!-- Toolbar -->
     <v-toolbar
       app
       dark
+      dense
+      flat
       extended
       extension-height="0"
       class="assumpta--main-toolbar"
       style="padding-left: 0 !important"
+      height="40"
     >
-      <v-toolbar-side-icon>
-        <font-awesome-icon icon="signal" size="2x"></font-awesome-icon>
+      <v-toolbar-side-icon to="/">
+        <v-icon>home</v-icon>
       </v-toolbar-side-icon>
-      <v-toolbar-title class="title text-uppercase">
+      <v-toolbar-title class="title text-uppercase hidden-sm-and-down">
         <span>ASSUMPTA</span>
         <span class="font-weight-light"> / KOPDIT</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+      <v-toolbar-items>
+        <v-btn v-for="nav in navItems" :key="`tool-nav-${nav.path}`" flat :to="nav.path" icon>
+          <v-icon>{{nav.icon}}</v-icon>
+        </v-btn>
+        <v-btn flat @click="logout" icon>
+          <v-icon>power_settings_new</v-icon>
+        </v-btn>
+      </v-toolbar-items>
+      <!-- <v-toolbar-items>
+      </v-toolbar-items> -->
       <v-progress-linear :active="loading" slot="extension" class="mx-0" indeterminate height="4"/>
     </v-toolbar>
 
     <!-- Left side drawer -->
-    <v-navigation-drawer v-model="showNav" clipped app mini-variant mini-variant-width="72">
+    <!-- <v-navigation-drawer v-model="showNav" clipped app mini-variant mini-variant-width="72">
       <v-list class="pt-0 side-list-icons" two-line>
         <template v-for="nav in navItems">
           <v-list-tile :key="nav.path" class="px-0" :to="nav.path" avatar>
@@ -44,14 +50,14 @@
           </v-list-tile>
         </template>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
     <!-- Last 5 actions messages, displayed as snackbars -->
 
     <!-- Main Content Goes Here -->
     <router-view/>
 
-    <v-footer app height="8">
+    <v-footer app height="8" color="white">
       <v-layout
       justify-center
       row
@@ -79,7 +85,7 @@ export default {
     color: 'pink',
     navItems: [
       {
-        path: '/app/employers',
+        path: '/app/employers/list',
         icon: 'person',
         title: 'Pegawai',
         color: 'blue darken-1'
@@ -92,7 +98,7 @@ export default {
       },
       {
         path: '/app/credit-requests',
-        icon: 'share',
+        icon: 'credit_card',
         title: 'Permintaan',
         color: 'teal darken-1'
       },
@@ -101,16 +107,16 @@ export default {
         icon: 'live_help',
         title: 'Pertanyaan',
         color: 'pink darken-1'
-      },
-      {
-        path: '/logout',
-        icon: 'power_settings_new',
-        title: 'Logout',
-        color: 'grey darken-3'
       }
     ],
     showNav: true
   }),
+  methods: {
+    logout () {
+      localStorage.removeItem('assumpta.user')
+      this.$router.push('/')
+    }
+  },
   computed: mapState({
     loading: 'loading',
     message: 'lastMessage'
@@ -120,7 +126,6 @@ export default {
 
 <style lang="scss">
 #assumpta--main-app {
-  background-color: white;
   height: 100%;
   width: 100%;
 

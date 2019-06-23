@@ -5,7 +5,7 @@
         <v-toolbar-title>Input Data Pertanyaan</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-text-field v-model="item.type" label="Nama Kriteria"></v-text-field>
+        <v-select label="Pilih Kriteria" :items="kriteria" v-model="item.type" />
         <v-textarea v-model="item.text" label="Text"></v-textarea>
         <v-text-field type="number" v-model.number="item.profileTarget" label="Nilai Profil"></v-text-field>
         <v-text-field type="number" v-model.number="item.showOrder" label="Urutan"></v-text-field>
@@ -25,6 +25,7 @@
 
 <script>
 import Actions from '@/store/actions'
+import { kriteria } from '@/commons'
 
 export default {
   props: ['id'],
@@ -35,7 +36,8 @@ export default {
       showOrder: 0,
       isCf: true,
       type: ''
-    }
+    },
+    kriteria
   }),
   methods: {
     save () {
@@ -55,7 +57,7 @@ export default {
         this.$store.dispatch(Actions.QUESTIONS_LOAD_ITEMS)
           .then(() => {
             item = this.$store.getters.getQuestionById(this.id)
-            console.log('HERE')
+            console.log('item = ', item)
             this.item = item
           })
       } else {

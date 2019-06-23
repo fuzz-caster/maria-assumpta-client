@@ -17,20 +17,14 @@ export default new Router({
       component: () => import('./views/app/App.vue'),
       children: [
         {
-          path: 'employers',
-          component: () => import('./views/app/employers/list.vue'),
-          children: [
-            {
-              path: '',
-              name: 'fill-employers',
-              component: Placeholder
-            },
-            {
-              path: 'add',
-              name: 'employers-add',
-              component: () => import('./components/EmployersAdd.vue')
-            }
-          ]
+          path: 'employers/list',
+          name: 'employers',
+          component: () => import('./views/app/employers/list.vue')
+        },
+        {
+          path: 'employers/add',
+          name: 'employers-add',
+          component: () => import('./views/app/employers/add.vue')
         },
         {
           path: 'members',
@@ -47,18 +41,46 @@ export default new Router({
           component: () => import('./views/app/members/add.vue')
         },
         {
+          path: 'members/:id/edit',
+          props: true,
+          component: () => import('./views/app/members/edit.vue')
+        },
+        {
           path: 'questions',
           component: () => import('./views/app/questions/list.vue')
         },
         {
-          path: 'questions/:id',
+          path: 'questions/:id/edit',
           props: true,
           component: () => import('./views/app/questions/edit.vue')
         },
         {
+          path: 'questions/:questionId/add-answer',
+          props: true,
+          component: () => import('./views/app/questions/add.answer.vue')
+        },
+        {
           path: 'questions/add',
           component: () => import('./views/app/questions/add.vue')
-        }
+        },
+        {
+          path: 'answers/:id/edit',
+          props: true,
+          component: () => import('./views/app/questions/edit.answer.vue')
+        },
+        {
+          path: 'credit-requests',
+          component: () => import('./views/app/credit-requests/list.vue')
+        },
+        {
+          path: 'credit-requests/add',
+          component: () => import('./views/app/credit-requests/add.vue')
+        },
+        {
+          path: 'credit-requests/:id/edit',
+          props: true,
+          component: () => import('./views/app/credit-requests/edit.vue')
+        },
       ]
     },
     {

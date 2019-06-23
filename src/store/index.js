@@ -47,6 +47,13 @@ export default new Vuex.Store({
     },
     questions (state, items) {
       state.questions = items
+    },
+    addAnswers (state, items) {
+      const answersId = state.answers.map(it => it.id)
+      const notIncluded = items.filter(it => {
+        return !answersId.includes(it.id)
+      })
+      state.answers = [ state.answers, ...notIncluded ]
     }
   },
   getters: {
@@ -59,6 +66,9 @@ export default new Vuex.Store({
       })
       // console.log(result)
       return result
+    },
+    getAnswersByQuestion: (state) => id => {
+      return state.answers.filter(an => an.questionId === id)
     }
   },
   actions: {
@@ -84,6 +94,14 @@ export default new Vuex.Store({
       await Services.Member.add(payload)
     }, 'add member'),
 
+    [ACTIONS.MEMBER_DELETE]: withStateLoader(async (context, id) => {
+      await Services.Member.remove(id)
+    }, 'delete member'),
+
+    [ACTIONS.MEMBER_UPDATE]: withStateLoader(async (context, payload) => {
+      await Services.Member.update(payload)
+    }, 'update member'),
+
     [ACTIONS.QUESTIONS_ADD]: withStateLoader(async (context, payload) => {
       return await Services.Question.add(payload)
     }, 'add question'),
@@ -93,8 +111,41 @@ export default new Vuex.Store({
       context.commit('questions', items)
     },
 
+    [ACTIONS.QUESTIONS_REMOVE]: withStateLoader(async (context, id) => {
+      return Services.Question.remove(id)
+    }),
+
     [ACTIONS.QUESTIONS_UPDATE]: withStateLoader(async (context, { id, payload }) => {
       await Services.Question.update({ id, payload })
-    }, 'update question')
+    }, 'update question'),
+
+    [ACTIONS.QUESTION_LOAD_ANSWERS]: async (context, id) => {
+      const answers = await Services.Answer.byQuestion(id)
+      context.commit('addAnswers', answers)
+    },
+
+    [ACTIONS.QUESTION_ADD_ANSWER]: withStateLoader(async (context, payload) => {
+      await Services.Answer.add(payload)
+    }, 'add answer'),
+
+    [ACTIONS.QUESTION_REMOVE_ANSWER]: withStateLoader(async (context, id) => {
+      await Services.Answer.remove(id)
+    }, 'remove answer'),
+
+    [ACTIONS.QUESTION_UPDATE_ANSWER]: withStateLoader(async (context, { id, payload }) => {
+      await Services.Answer.update({ id, payload })
+    }, 'update answer'),
+
+    [ACTIONS.CREDIT_REQUEST_ADD]: withStateLoader(async (context, payload) => {
+      await Services.CreditRequest.add(payload)
+    }),
+
+    [ACTIONS.CREDIT_REQUEST_UPDATE]: withStateLoader(async (context, payload) => {
+      await Services.CreditRequest.update(payload)
+    }, 'update pengajuan pinjaman'),
+
+    [ACTIONS.CREDIT_REQUEST_REMOVE]: withStateLoader(async (context, id) => {
+      await Services.CreditRequest.remove(id)
+    }, 'hapus pengajuan pinjaman')
   }
 })

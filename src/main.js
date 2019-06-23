@@ -6,14 +6,14 @@ import router from './router'
 import store from './store/index'
 import './registerServiceWorker'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faSignal, faTable, faCog, faCube, faTrash, faEllipsisH, faRandom, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faSignal, faTable, faCog, faCube, faAngleDoubleDown, faTrash, faEllipsisH, faRandom, faHeart } from '@fortawesome/free-solid-svg-icons'
 import { faFoursquare, faBuffer, faEmpire } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import TextAvatar from './components/TextAvatar'
 
 Vue.config.productionTip = false
 
-library.add(faFoursquare, faBuffer, faEmpire, faUserSecret, faTable, faCog, faCube, faTrash, faRandom, faHeart, faSignal, faEllipsisH)
+library.add(faFoursquare, faBuffer, faEmpire, faUserSecret, faTable, faCog, faCube, faTrash, faRandom, faHeart, faSignal, faEllipsisH, faAngleDoubleDown)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 // Custom avatar component
 Vue.component('text-avatar', TextAvatar)
